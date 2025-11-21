@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>InterViewMe - AI-Powered Interview Coach</title>
@@ -12,7 +15,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          /*  font-family: 'Roboto', Tahoma, Geneva, Verdana, sans-serif;*/
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #333;
             overflow-x: hidden;
@@ -91,18 +94,27 @@
             animation: fadeInUp 0.8s ease-out 0.2s both;
         }
 
+        .cta-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-start;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
         .cta-button {
             display: inline-block;
-            padding: 1.2rem 3rem;
+            padding: 0.8rem 2rem;
             background: white;
             color: #667eea;
             text-decoration: none;
-            font-size: 1.1rem;
+            font-size: 0.95rem;
             font-weight: 600;
             border-radius: 50px;
             transition: all 0.3s;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            animation: fadeInUp 0.8s ease-out 0.4s both;
+            min-width: 150px;
+            text-align: center;
         }
 
         .cta-button:hover {
@@ -133,7 +145,7 @@
             max-width: 1200px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns:1fr /*repeat(auto-fit, minmax(280px, 1fr))*/;
             gap: 3rem;
         }
 
@@ -150,6 +162,7 @@
             border-radius: 15px;
             transition: transform 0.3s, box-shadow 0.3s;
             cursor: pointer;
+            display:block;
         }
 
         .feature-card:hover {
@@ -265,6 +278,10 @@
             .nav-links {
                 display: none;
             }
+
+            .cta-buttons {
+                align-items: center;
+            }
         }
 
         .pulse {
@@ -297,8 +314,10 @@
             <div class="hero-text">
                 <h1>Master Your Interview Confidence</h1>
                 <p>Get real-time AI feedback on eye contact, body language, voice tone, and speech patterns. Practice with confidence, land your dream job.</p>
-                <a href="#" class="cta-button pulse">Sign Up</a>
-                 <a href="#" class="cta-button pulse">Sign In</a>
+                <div class="cta-buttons">
+                    <a href="#" class="cta-button pulse">Sign Up</a>
+                    <a href="#" class="cta-button pulse">Sign In</a>
+                </div>
             </div>
             <div class="hero-visual">
                
