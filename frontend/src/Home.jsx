@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
+
 
 function Home() {
 
@@ -210,8 +212,11 @@ function Home() {
           <div className="hero-text">
             <h1>Master Your Interview Confidence</h1>
             <p>Get real-time AI feedback on eye contact, body language, voice tone, and speech patterns.</p>
-            <a href="#" className="cta-button">Sign Up</a>
-            <a href="#" className="cta-button">Sign In</a>
+            
+            <Link to="/signup" className="cta-button">Sign Up</Link>
+            <Link to="/login" className="cta-button">Sign In</Link>
+
+
           </div>
         </div>
       </section>

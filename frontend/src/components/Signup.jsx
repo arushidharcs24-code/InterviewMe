@@ -41,6 +41,13 @@ function Signup() {
           />
 
           <button style={styles.button}>Sign Up</button>
+          <p style={{ marginTop: "15px", fontSize: "14px" }}>
+  Already have an account?
+  <a href="/login" style={{ color: "#667eea", fontWeight: "bold", marginLeft: "5px" }}>
+    Sign In
+  </a>
+</p>
+
         </form>
       </div>
     </div>
@@ -48,20 +55,28 @@ function Signup() {
 }
 
 const styles = {
-  container: {
-    minHeight: "100vh",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-  },
+ container: {
+  width: "100vw",
+  height: "100vh",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  flexDirection: "column",
+  background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+},
+
   card: {
-    width: "350px",
-    padding: "30px",
-    background: "white",
-    borderRadius: "15px",
-    boxShadow: "0px 0px 20px rgba(0,0,0,0.2)",
-  },
+  width: "350px",
+  padding: "30px",
+  background: "white",
+  borderRadius: "15px",
+  boxShadow: "0px 0px 20px rgba(0,0,0,0.2)",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",   
+  justifyContent: "center", 
+},
+
   title: {
     textAlign: "center",
     marginBottom: "20px",
@@ -69,22 +84,35 @@ const styles = {
     fontSize: "24px",
     fontWeight: "bold",
   },
+
   input: {
-    width: "100%",
-    padding: "12px",
-    marginBottom: "15px",
-    borderRadius: "8px",
-    border: "1px solid #ccc",
-  },
-  button: {
-    width: "100%",
-    padding: "12px",
-    background: "#667eea",
-    color: "white",
-    border: "none",
-    borderRadius: "8px",
-    cursor: "pointer",
-  },
+  width: "280px",
+  padding: "12px",
+  marginBottom: "15px",
+  borderRadius: "8px",
+  border: "1px solid #ccc",
+  display: "block",
+  marginLeft: "auto",
+  marginRight: "auto",
+},
+
+
+button: {
+  width: "280px",
+  padding: "12px",
+  background: "#667eea",
+  color: "white",
+  border: "none",
+  borderRadius: "8px",
+  cursor: "pointer",
+  fontSize: "16px",
+  display: "block",
+  marginTop: "5px",
+  marginLeft: "auto",
+  marginRight: "auto",
+},
+
+
 };
 
 export default Signup;
