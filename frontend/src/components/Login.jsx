@@ -1,133 +1,110 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-
+import { Lock, Mail, LogIn, CheckCircle, AlertTriangle } from "lucide-react";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async (e) => {
-  e.preventDefault();
-  try {
-    const res = await axios.post("http://localhost:5000/api/auth/login", {
-      email,
-      password,
-    });
+    e.preventDefault();
+    setError("");
 
-    alert(res.data.msg); // "Login successful"
-    
-    // Save JWT to localStorage
-    localStorage.setItem("token", res.data.token);
+    if (!email || !password) {
+      setError("Please fill all fields.");
+      return;
+    }
 
-    // Optionally redirect to dashboard
-    // window.location.href = "/dashboard";
-  } catch (err) {
-    alert(err.response?.data?.msg || "Login failed");
-  }
-};
+    setIsLoading(true);
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
+      const data = await res.json();
+
+      if (res.ok) {
+        localStorage.setItem("user", JSON.stringify(data)); // save login info
+        window.location.href = "/home"; // redirect
+      } else {
+        setError(data.msg || "Login failed.");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Server error. Check your backend or network.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.card}>
-        <h2 style={styles.title}>Sign In</h2>
+    <div className="min-h-screen flex justify-center items-center bg-gradient-to-br from-indigo-600 to-purple-700 p-4 font-sans">
+      <div className="w-full max-w-md p-8 bg-white rounded-2xl shadow-2xl flex flex-col items-center">
+        <LogIn className="w-10 h-10 text-indigo-600 mb-4" />
+        <h2 className="text-center mb-6 text-3xl font-extrabold text-slate-800">
+          Log In
+        </h2>
 
-        <form onSubmit={handleLogin}>
-          <input
-            type="email"
-            placeholder="Email"
-            style={styles.input}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+        <form onSubmit={handleLogin} className="w-full space-y-4">
+          <div className="relative">
+            <Mail className="absolute top-1/2 left-3 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <input
+              type="email"
+              placeholder="Email"
+              className="w-full p-3 pl-10 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 outline-none transition-colors"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={isLoading}
+            />
+          </div>
 
-          <input
-            type="password"
-            placeholder="Password"
-            style={styles.input}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <div className="relative">
+            <Lock className="absolute top-1/2 left-3 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <input
+              type="password"
+              placeholder="Password"
+              className="w-full p-3 pl-10 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 outline-none transition-colors"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              disabled={isLoading}
+            />
+          </div>
 
-          <button style={styles.button}>Login</button>
-          <p style={{ marginTop: "15px", fontSize: "14px" }}>
-  Don't have an account?
-  <a href="/signup" style={{ color: "#667eea", fontWeight: "bold", marginLeft: "5px" }}>
-    Sign Up
-  </a>
-</p>
+          <button
+            type="submit"
+            className={`w-full p-3 mt-4 text-white font-bold rounded-lg transition-all shadow-lg flex items-center justify-center gap-2
+              ${isLoading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-indigo-600 hover:bg-indigo-700 shadow-indigo-500/50 hover:scale-[1.01] active:scale-[0.98]"
+              }`}
+            disabled={isLoading}
+          >
+            {isLoading ? "Processing..." : "Log In"}
+          </button>
 
+          {error && (
+            <p className="flex items-center gap-2 mt-4 text-sm text-red-700 bg-red-100 p-3 rounded-lg border border-red-300">
+              <AlertTriangle className="w-4 h-4" />
+              {error}
+            </p>
+          )}
+
+          <p className="mt-5 text-sm text-center text-gray-600">
+            Don't have an account?
+            <a
+              href="/signup"
+              className="text-indigo-600 font-bold ml-1 hover:text-indigo-800 transition-colors"
+            >
+              Sign Up
+            </a>
+          </p>
         </form>
       </div>
     </div>
   );
 }
-
-const styles = {
-container: {
-  width: "100vw",
-  height: "100vh",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  flexDirection: "column",
-  background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-  padding: 0,
-  margin: 0,
-},
-
-
-card: {
-  width: "350px",
-  padding: "30px",
-  background: "white",
-  borderRadius: "15px",
-  boxShadow: "0px 0px 20px rgba(0,0,0,0.2)",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-},
-title: {
-    textAlign: "center",
-    marginBottom: "20px",
-    color: "#667eea",
-    fontSize: "24px",
-    fontWeight: "bold",
-  },
-
-input: {
-  width: "280px",
-  padding: "12px",
-  marginBottom: "15px",
-  borderRadius: "8px",
-  border: "1px solid #ccc",
-  display: "block",
-  marginLeft: "auto",
-  marginRight: "auto",
-},
-
-
-
-button: {
-  width: "280px",
-  padding: "12px",
-  background: "#667eea",
-  color: "white",
-  border: "none",
-  borderRadius: "8px",
-  cursor: "pointer",
-  fontSize: "16px",
-  display: "block",
-  marginTop: "5px",
-  marginLeft: "auto",
-  marginRight: "auto",
-},
-
-
-
-
-};
 
 export default Login;
