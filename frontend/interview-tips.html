@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Interview Tips — Premium Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Tailwind config for extended colors & smoother fonts
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              300: '#93c5fd',
+              500: '#3b82f6',
+              700: '#1e40af'
+            },
+            accent: {
+              50: '#fff7ed',
+              300: '#fbbf24',
+              500: '#f59e0b'
+            }
+          },
+          boxShadow: {
+            'soft-lg': '0 10px 30px rgba(17,24,39,0.08)',
+            'glass': '0 8px 30px rgba(59,130,246,0.08)'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* small custom flourish */
+    .card-fade {
+      transition: transform .28s cubic-bezier(.2,.9,.2,1), box-shadow .28s;
+    }
+    .card-fade:hover { transform: translateY(-6px) scale(1.005); box-shadow: 0 18px 40px rgba(15,23,42,0.12); }
+    .btn-ghost:focus { outline: 2px solid rgba(59,130,246,0.18); outline-offset: 3px; border-radius: 999px; }
+    .progress-circle { transform: rotate(-90deg); }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-primary-50 via-indigo-50 to-purple-50 min-h-screen font-sans text-gray-800">
+  <div class="max-w-7xl mx-auto p-6 md:p-10">
+    <!-- Header -->
+    <header class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-8">
+      <div class="flex items-center gap-4">
+        <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-primary-500 to-purple-600 shadow-lg flex items-center justify-center">
+          <!-- Hero icon (check + shield) -->
+          <svg class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2l7 3v5c0 5-3 9-7 11-4-2-7-6-7-11V5l7-3z"></path>
+            <path d="M9 12l2 2 4-4"></path>
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-3xl md:text-4xl font-extrabold leading-tight">Ace Your Interview — Dashboard</h1>
+          <p class="text-gray-600 mt-1">Actionable tips, progress tracking, and curated strategies for campus placements.</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4 w-full md:w-auto">
+        <div class="relative flex items-center bg-white rounded-full px-3 py-2 shadow-sm border">
+          <svg class="w-5 h-5 text-gray-400 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M21 21l-4.35-4.35"></path>
+            <circle cx="11" cy="11" r="6"></circle>
+          </svg>
+          <input id="searchInput" type="search" placeholder="Search tips, keywords..." class="outline-none w-48 md:w-64 text-sm bg-transparent" />
+        </div>
+
+        <button id="resetBtn" class="btn-ghost bg-white px-3 py-2 rounded-full shadow-sm border hover:shadow 'transition' text-sm" title="Reset progress">
+          <svg class="w-5 h-5 text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M21 12a9 9 0 11-9-9v4"></path><path d="M21 3v6h-6"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Top stats -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+      <div class="bg-white p-6 rounded-2xl shadow-soft-lg card-fade flex items-center gap-4">
+        <div class="p-3 rounded-xl bg-gradient-to-br from-primary-100 to-primary-300">
+          <svg class="w-7 h-7 text-primary-700" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M12 8v8M8 12h8"></path><path d="M21 12A9 9 0 1 1 3 12a9 9 0 0 1 18 0z"></path>
+          </svg>
+        </div>
+        <div class="flex-1">
+          <div class="text-sm text-gray-500">Total Tips</div>
+          <div id="statTotal" class="text-2xl font-bold">—</div>
+          <div class="text-xs text-gray-400 mt-1">Across all categories</div>
+        </div>
+      </div>
+
+      <div class="bg-white p-6 rounded-2xl shadow-soft-lg card-fade flex items-center gap-4">
+        <div class="p-3 rounded-xl bg-gradient-to-br from-green-200 to-green-300">
+          <svg class="w-7 h-7 text-green-700" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M5 13l4 4L19 7"></path>
+          </svg>
+        </div>
+        <div class="flex-1">
+          <div class="text-sm text-gray-500">Completed</div>
+          <div id="statCompleted" class="text-2xl font-bold text-green-600">0</div>
+          <div class="text-xs text-gray-400 mt-1">Tips you've checked off</div>
+        </div>
+      </div>
+
+      <div class="bg-white p-6 rounded-2xl shadow-soft-lg card-fade flex items-center gap-4 justify-between">
+        <div class="flex-1">
+          <div class="text-sm text-gray-500">Overall Progress</div>
+          <div class="flex items-center gap-4 mt-2">
+            <svg class="w-20 h-20 progress-circle" viewBox="0 0 36 36">
+              <defs>
+                <linearGradient id="g1" x1="0%" x2="100%">
+                  <stop offset="0%" stop-color="#4f46e5"/>
+                  <stop offset="100%" stop-color="#8b5cf6"/>
+                </linearGradient>
+              </defs>
+              <circle cx="18" cy="18" r="15" stroke="#eef2ff" stroke-width="6" fill="none"></circle>
+              <circle id="progressRing" cx="18" cy="18" r="15" stroke="url(#g1)" stroke-width="6" stroke-dasharray="94.2" stroke-dashoffset="94.2" stroke-linecap="round" fill="none"></circle>
+              <text id="progressText" x="18" y="20.4" font-size="7" text-anchor="middle" fill="#111827">0%</text>
+            </svg>
+            <div>
+              <div id="statPercent" class="text-3xl font-extrabold">0%</div>
+              <div class="text-xs text-gray-400">Keep checking tips as you practice</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main content -->
+    <main class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <!-- Left nav / categories -->
+      <aside class="lg:col-span-1 bg-white rounded-2xl p-5 shadow-glass card-fade">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-semibold">Categories</h3>
+          <span id="activeCategoryBadge" class="text-xs bg-primary-100 text-primary-700 px-2 py-1 rounded-full">Preparation</span>
+        </div>
+
+        <nav class="space-y-3">
+          <button class="category-item w-full text-left flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-primary-50 transition" data-cat="preparation">
+            <svg class="w-5 h-5 text-primary-500" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 12h18"/></svg>
+            <div>
+              <div class="text-sm font-medium">Preparation</div>
+              <div class="text-xs text-gray-400">Company, resume, questions</div>
+            </div>
+            <div class="ml-auto text-xs text-gray-400" id="preparation-count">4</div>
+          </button>
+
+          <button class="category-item w-full text-left flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-primary-50 transition" data-cat="technical">
+            <svg class="w-5 h-5 text-purple-500" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 3v18"/></svg>
+            <div>
+              <div class="text-sm font-medium">Technical</div>
+              <div class="text-xs text-gray-400">DSA, systems, problem solving</div>
+            </div>
+            <div class="ml-auto text-xs text-gray-400" id="technical-count">4</div>
+          </button>
+
+          <button class="category-item w-full text-left flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-primary-50 transition" data-cat="behavioral">
+            <svg class="w-5 h-5 text-indigo-500" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 12a4 4 0 110-8 4 4 0 010 8z"/></svg>
+            <div>
+              <div class="text-sm font-medium">Behavioral</div>
+              <div class="text-xs text-gray-400">Stories, fit & values</div>
+            </div>
+            <div class="ml-auto text-xs text-gray-400" id="behavioral-count">4</div>
+          </button>
+
+          <button class="category-item w-full text-left flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-primary-50 transition" data-cat="mistakes">
+            <svg class="w-5 h-5 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 9v2m0 4h.01"/><path d="M21 12A9 9 0 1 1 3 12a9 9 0 0 1 18 0z"/></svg>
+            <div>
+              <div class="text-sm font-medium">Avoid These</div>
+              <div class="text-xs text-gray-400">Common things to skip</div>
+            </div>
+            <div class="ml-auto text-xs text-gray-400" id="mistakes-count">5</div>
+          </button>
+        </nav>
+
+        <div class="mt-6 pt-4 border-t">
+          <h4 class="text-sm text-gray-500 mb-2">Quick actions</h4>
+          <div class="flex flex-col gap-2">
+            <button id="markAllBtn" class="w-full text-sm bg-gradient-to-r from-primary-600 to-purple-500 text-white px-3 py-2 rounded-lg shadow">Mark all in category</button>
+            <button id="exportBtn" class="w-full text-sm border px-3 py-2 rounded-lg hover:bg-primary-50">Export progress (JSON)</button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Tips listing (main) -->
+      <section class="lg:col-span-3 space-y-6">
+        <!-- Controls row -->
+        <div class="bg-white p-4 rounded-2xl shadow-glass flex flex-col md:flex-row items-center justify-between gap-4 card-fade">
+          <div class="flex items-center gap-3">
+            <div class="text-sm text-gray-600">Showing</div>
+            <select id="sortSelect" class="text-sm border rounded-full px-3 py-1 text-gray-700">
+              <option value="default">Default</option>
+              <option value="completed">Completed first</option>
+              <option value="incomplete">Incomplete first</option>
+            </select>
+            <div class="ml-2 text-xs text-gray-400">• Drag or click cards to expand</div>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <div class="text-sm text-gray-600">Filter</div>
+            <label class="inline-flex items-center gap-2 text-sm">
+              <input id="onlyIncomplete" type="checkbox" class="rounded border-gray-300" />
+              <span class="text-sm text-gray-600">Only incomplete</span>
+            </label>
+            <button id="shuffleBtn" class="ml-2 bg-white border px-3 py-1 rounded-full text-sm hover:shadow">Shuffle</button>
+          </div>
+        </div>
+
+        <!-- grid of tip cards -->
+        <div id="tipsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
+
+        <!-- footer / note -->
+        <div class="text-sm text-center text-gray-500">Tip: click the checkbox on each card to mark it complete. Your progress updates instantly.</div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    /*****************************
+     * Data & State
+     *****************************/
+    const tips = {
+      preparation: [
+        {
+          title: "Research the Company Thoroughly",
+          content: "Know the company's products, services, recent news, culture, and values. Check LinkedIn, website, and press releases. Understand competitors and market position.",
+          actionable: ["Visit company site & social", "Read 2 recent news articles", "Note 3 key differentiators"],
+        },
+        {
+          title: "Master Your Resume",
+          content: "Be ready to explain every line on your resume. Use STAR for projects and quantify achievements where possible.",
+          actionable: ["Prepare 2–3 STAR stories", "Highlight measurable impact", "Practice concise explanations"],
+        },
+        {
+          title: "Practice Common Questions",
+          content: "Prepare 'Tell me about yourself', 'Why this company?', and strength/weakness answers. Keep answers structured and focused.",
+          actionable: ["Write and rehearse answers", "Time to 60–90s each", "Record and improve delivery"],
+        },
+        {
+          title: "Prepare Smart Questions",
+          content: "Have 4–5 thoughtful questions. Ask about team, product, learning opportunities, and success metrics.",
+          actionable: ["Draft 5 role-specific questions", "Avoid salary-first questions in first round"],
+        }
+      ],
+      technical: [
+        {
+          title: "Think Out Loud",
+          content: "Share your thought process during problem solving; interviewers evaluate approach as much as solution.",
+          actionable: ["Clarify constraints", "Compare approaches", "Discuss trade-offs"],
+        },
+        {
+          title: "Handle 'I Don't Know' Gracefully",
+          content: "Admit gaps but show your strategy to approach unknowns and related knowledge you can apply.",
+          actionable: ["Describe how you'd find the answer", "Relate to similar concepts"],
+        },
+        {
+          title: "Practice Coding Without an IDE",
+          content: "Write clean code on paper or whiteboard; emphasize readability and test with examples.",
+          actionable: ["Practice 5 problems on paper", "Explain time/space complexity"],
+        },
+        {
+          title: "Know Fundamentals Well",
+          content: "Revise DS, Algorithms, OOP, DBMS, OS & networking basics and common patterns.",
+          actionable: ["List top-20 patterns", "Revise Big-O for common ops"],
+        }
+      ],
+      behavioral: [
+        {
+          title: "Show Leadership & Initiative",
+          content: "Highlight times you stepped up, coordinated teams, or drove results without formal authority.",
+          actionable: ["Prepare 2 leadership stories", "Quantify results when possible"],
+        },
+        {
+          title: "Demonstrate Problem-Solving",
+          content: "Use concrete examples showing analytical approach, creativity, and perseverance.",
+          actionable: ["Outline problem, options explored, final outcome"],
+        },
+        {
+          title: "Show Cultural Fit",
+          content: "Understand company values and weave them naturally into your responses.",
+          actionable: ["Match 2–3 values to your experiences"],
+        },
+        {
+          title: "Handle Weaknesses Smartly",
+          content: "Choose a genuine weakness and show actionable steps you're taking to improve.",
+          actionable: ["Mention ongoing improvements and measurable progress"],
+        }
+      ],
+      mistakes: [
+        {
+          title: "Speaking Negatively",
+          content: "Don't badmouth past employers; focus on learnings and professional framing.",
+          actionable: ["Reframe negative experiences positively"],
+        },
+        {
+          title: "Being Too Humble or Arrogant",
+          content: "Balance confidence with humility; credit team efforts where due.",
+          actionable: ["Use 'I' and 'we' appropriately"],
+        },
+        {
+          title: "Not Asking Questions",
+          content: "Always ask something insightful to show curiosity and fit.",
+          actionable: ["Prepare role-specific questions"],
+        },
+        {
+          title: "Arriving Unprepared",
+          content: "Know basics about company and role; for remote interviews, test your tech beforehand.",
+          actionable: ["Log in 10 mins early", "Have resume handy"],
+        },
+        {
+          title: "Rambling or One-Word Answers",
+          content: "Aim for structured 1–2 minute answers (use STAR), pause to collect thoughts before responding.",
+          actionable: ["Practice concise storytelling", "Use pauses to think"],
+        }
+      ]
+    };
+
+    // persistent-ish state in localStorage
+    const STORAGE_KEY = 'interview_tips_state_v1';
+    let state = {
+      checked: {}, // e.g., { "preparation-0": true }
+      currentCategory: 'preparation'
+    };
+
+    // load saved state
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) state = JSON.parse(raw);
+    } catch(e) { /* ignore */ }
+
+    /*****************************
+     * Helpers
+     *****************************/
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      renderStats();
+    }
+
+    function uid(cat, idx) { return `${cat}-${idx}`; }
+
+    function countTotalTips() {
+      return Object.values(tips).reduce((sum, arr) => sum + arr.length, 0);
+    }
+
+    function countCompleted() {
+      return Object.keys(state.checked).filter(k => state.checked[k]).length;
+    }
+
+    function updateProgressRing() {
+      const total = countTotalTips();
+      const done = countCompleted();
+      const pct = total === 0 ? 0 : Math.round((done/total)*100);
+      const ring = document.getElementById('progressRing');
+      const text = document.getElementById('progressText');
+      const circumference = 2 * Math.PI * 15; // r=15
+      const dash = (circumference * pct) / 100;
+      ring.style.strokeDasharray = `${dash} ${circumference}`;
+      document.getElementById('progressText').textContent = pct + '%';
+      document.getElementById('statPercent').textContent = pct + '%';
+    }
+
+    /*****************************
+     * Render functions
+     *****************************/
+    function renderCounts() {
+      document.getElementById('preparation-count').textContent = tips.preparation.length;
+      document.getElementById('technical-count').textContent = tips.technical.length;
+      document.getElementById('behavioral-count').textContent = tips.behavioral.length;
+      document.getElementById('mistakes-count').textContent = tips.mistakes.length;
+      document.getElementById('statTotal').textContent = countTotalTips();
+      document.getElementById('statCompleted').textContent = countCompleted();
+      updateProgressRing();
+    }
+
+    function renderTipsGrid() {
+      const container = document.getElementById('tipsGrid');
+      container.innerHTML = '';
+      const cat = state.currentCategory;
+      const arr = tips[cat].slice(); // copy
+      const onlyIncomplete = document.getElementById('onlyIncomplete').checked;
+      const sort = document.getElementById('sortSelect').value;
+
+      // sorting
+      if (sort === 'completed') {
+        arr.sort((a, b, i) => (state.checked[uid(cat,i)] ? -1 : 1));
+      } else if (sort === 'incomplete') {
+        arr.sort((a, b, i) => (state.checked[uid(cat,i)] ? 1 : -1));
+      } // default: original order
+
+      arr.forEach((tip, originalIndex) => {
+        // find original index in full array
+        const idx = tips[cat].indexOf(tip);
+        const id = uid(cat, idx);
+        const done = !!state.checked[id];
+        if (onlyIncomplete && done) return;
+
+        const card = document.createElement('article');
+        card.className = `bg-white p-5 rounded-2xl shadow card-fade relative overflow-hidden`;
+        card.setAttribute('data-id', id);
+
+        // header row
+        const header = document.createElement('div');
+        header.className = 'flex items-start gap-3';
+
+        const checkbox = document.createElement('button');
+        checkbox.className = `w-9 h-9 rounded-full border-2 flex items-center justify-center transition ${done ? 'bg-green-500 border-green-500' : 'border-gray-200 hover:border-green-400'}`;
+        checkbox.innerHTML = done ? `<svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 13l4 4L19 7"/></svg>` : '';
+        checkbox.onclick = (e) => { e.stopPropagation(); state.checked[id] = !state.checked[id]; saveState(); renderTipsGrid(); renderCounts(); };
+
+        const body = document.createElement('div');
+        body.className = 'flex-1';
+
+        const titleRow = document.createElement('div');
+        titleRow.className = 'flex items-center gap-2 justify-between';
+        const title = document.createElement('h3');
+        title.className = 'text-lg font-semibold';
+        title.textContent = tip.title;
+
+        const chevron = document.createElement('div');
+        chevron.className = 'text-gray-400 text-sm';
+        chevron.textContent = state.expanded === id ? '▲' : '▼';
+
+        titleRow.appendChild(title);
+        titleRow.appendChild(chevron);
+
+        const summary = document.createElement('p');
+        summary.className = 'mt-2 text-sm text-gray-600';
+        summary.textContent = tip.content;
+
+        body.appendChild(titleRow);
+        body.appendChild(summary);
+
+        header.appendChild(checkbox);
+        header.appendChild(body);
+
+        // actionable list (hidden by default)
+        const actions = document.createElement('div');
+        actions.className = `mt-4 ml-12 transition-all text-sm overflow-hidden ${state.expanded === id ? 'max-h-96' : 'max-h-0'}`;
+        actions.innerHTML = `<h4 class="font-medium text-gray-800 mb-2">Action steps</h4>`;
+        const ul = document.createElement('ul');
+        ul.className = 'space-y-2';
+        (tip.actionable || []).forEach(step => {
+          const li = document.createElement('li');
+          li.className = 'flex items-start gap-3';
+          li.innerHTML = `<span class="text-primary-500 font-bold">•</span><span>${step}</span>`;
+          ul.appendChild(li);
+        });
+        actions.appendChild(ul);
+
+        // footer with meta
+        const footer = document.createElement('div');
+        footer.className = 'mt-4 ml-12 flex items-center justify-between text-xs text-gray-400';
+        footer.innerHTML = `<div>Category: <span class="text-gray-600">${cat}</span></div><div>${done ? 'Completed' : 'Incomplete'}</div>`;
+
+        card.appendChild(header);
+        card.appendChild(actions);
+        card.appendChild(footer);
+
+        card.onclick = () => {
+          state.expanded = state.expanded === id ? null : id;
+          renderTipsGrid();
+        };
+
+        container.appendChild(card);
+      });
+    }
+
+    function renderStats() {
+      document.getElementById('statCompleted').textContent = countCompleted();
+      document.getElementById('statTotal').textContent = countTotalTips();
+      updateProgressRing();
+    }
+
+    /*****************************
+     * Event bindings & init
+     *****************************/
+    // initial category
+    function setCategory(cat) {
+      state.currentCategory = cat;
+      document.getElementById('activeCategoryBadge').textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
+      document.querySelectorAll('.category-item').forEach(btn => {
+        btn.classList.toggle('bg-primary-50', btn.dataset.cat === cat);
+      });
+      saveState();
+      renderTipsGrid();
+      renderCounts();
+    }
+
+    document.querySelectorAll('.category-item').forEach(btn => {
+      btn.addEventListener('click', () => setCategory(btn.dataset.cat));
+    });
+
+    document.getElementById('onlyIncomplete').addEventListener('change', () => renderTipsGrid());
+    document.getElementById('sortSelect').addEventListener('change', () => renderTipsGrid());
+    document.getElementById('shuffleBtn').addEventListener('click', () => {
+      Object.keys(tips).forEach(cat => tips[cat].sort(() => Math.random() - 0.5));
+      renderTipsGrid();
+    });
+
+    document.getElementById('markAllBtn').addEventListener('click', () => {
+      const cat = state.currentCategory;
+      tips[cat].forEach((_, i) => state.checked[uid(cat,i)] = true);
+      saveState();
+      renderTipsGrid();
+      renderCounts();
+    });
+
+    document.getElementById('exportBtn').addEventListener('click', () => {
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'interview_tips_progress.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      if (!confirm('Reset all progress?')) return;
+      state.checked = {};
+      state.expanded = null;
+      saveState();
+      renderTipsGrid();
+      renderCounts();
+    });
+
+    // search
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      const q = e.target.value.trim().toLowerCase();
+      const cards = document.querySelectorAll('#tipsGrid article');
+      if (!q) {
+        cards.forEach(c => c.style.display = '');
+        return;
+      }
+      cards.forEach(card => {
+        const txt = card.innerText.toLowerCase();
+        card.style.display = txt.includes(q) ? '' : 'none';
+      });
+    });
+
+    // initialize UI counts and rendering
+    renderCounts();
+    setCategory(state.currentCategory || 'preparation');
+    renderTipsGrid();
+    renderStats();
+
+    // small accessibility: keyboard toggle for space/enter on focused cards
+    document.addEventListener('keydown', (e) => {
+      if ((e.key === 'Enter' || e.key === ' ') && document.activeElement && document.activeElement.tagName === 'ARTICLE') {
+        document.activeElement.click();
+      }
+    });
+  </script>
+</body>
+</html>
