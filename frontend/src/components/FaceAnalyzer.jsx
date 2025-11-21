@@ -9,37 +9,21 @@ export default function FaceAnalyzer() {
   const [posture, setPosture] = useState("Centered");
 
   // ---------- Helper Functions ----------
-  const getDistance = (p1, p2) => {
-    return Math.sqrt(
-      Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2)
-    );
-  };
+  const getDistance = (p1, p2) =>
+    Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
 
-  // Eye openness → confidence
   const calculateEyeOpenness = (landmarks) => {
-      if (!landmarks) return 0;
-  if (!landmarks[159] || !landmarks[145]) return 0;
-    const leftTop = landmarks[159];
-    const leftBottom = landmarks[145];
-    const leftHeight = getDistance(leftTop, leftBottom);
+    if (!landmarks[159] || !landmarks[145] || !landmarks[386] || !landmarks[374])
+      return 0;
 
-    const rightTop = landmarks[386];
-    const rightBottom = landmarks[374];
-    const rightHeight = getDistance(rightTop, rightBottom);
-
+    const leftHeight = getDistance(landmarks[159], landmarks[145]);
+    const rightHeight = getDistance(landmarks[386], landmarks[374]);
     return ((leftHeight + rightHeight) / 2).toFixed(3);
   };
 
-  // Mouth curve → smile / neutral
   const calculateMouthCurve = (landmarks) => {
-    const leftMouth = landmarks[61];
-    const rightMouth = landmarks[291];
-    const topLip = landmarks[13];
-    const bottomLip = landmarks[14];
-
-    const width = getDistance(leftMouth, rightMouth);
-    const height = getDistance(topLip, bottomLip);
-
+    const width = getDistance(landmarks[61], landmarks[291]);
+    const height = getDistance(landmarks[13], landmarks[14]);
     const ratio = height / width;
 
     if (ratio > 0.08) return "Smiling";
@@ -47,12 +31,8 @@ export default function FaceAnalyzer() {
     return "Neutral";
   };
 
-  // Head pose → posture (tilt)
   const calculateHeadTilt = (landmarks) => {
-    const leftEye = landmarks[33];
-    const rightEye = landmarks[263];
-
-    return Math.abs(leftEye.y - rightEye.y) > 0.02
+    return Math.abs(landmarks[33].y - landmarks[263].y) > 0.02
       ? "Tilted"
       : "Centered";
   };
@@ -72,27 +52,22 @@ export default function FaceAnalyzer() {
     });
 
     faceMesh.onResults((results) => {
-      if (!results.multiFaceLandmarks || results.multiFaceLandmarks.length === 0){ return;
-    }
-      const landmarks = results.multiFaceLandmarks[0];
+      const landmarks = results.multiFaceLandmarks?.[0];
+      if (!landmarks) return;
 
-        if (!landmarks[159] || !landmarks[145] || !landmarks[386] || !landmarks[374]) {
-    console.warn("Landmarks not fully detected yet");
-    return;
-        }
       // Eye confidence estimation
       const openness = calculateEyeOpenness(landmarks);
-      const eyePercentage = Math.min(100, (openness * 1000)).toFixed(0);
+      const eyePercentage = Math.min(100, openness * 1000).toFixed(0);
       setEyeContact(eyePercentage);
 
-      // Mouth curve
+      // Mouth expression
       setExpression(calculateMouthCurve(landmarks));
 
       // Head posture
       setPosture(calculateHeadTilt(landmarks));
     });
 
-    if (typeof videoRef.current !== "undefined") {
+    if (videoRef.current) {
       const camera = new Camera(videoRef.current, {
         onFrame: async () => {
           await faceMesh.send({ image: videoRef.current });
