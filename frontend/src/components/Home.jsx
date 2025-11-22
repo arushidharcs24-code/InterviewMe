@@ -130,6 +130,7 @@ export default function Home() {
                 <button className="btn-secondary btn-large">Watch Demo</button>
               </div>
             </div>
+            
           </div>
         </div>
       </section>
