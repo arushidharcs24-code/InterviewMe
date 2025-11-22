@@ -43,7 +43,12 @@ export default function Home() {
         <div className="navbar-content-wrapper">
           <div className="navbar-logo-group">
             <div className="logo-icon-box">
-              <span className="logo-icon-text">IV</span>
+              <span className="logo-icon-text"> <img 
+    src="logo.jpg"  // path to your logo image
+    alt="Logo" 
+    style={{ width: "50px", height: "40px" }} 
+  />
+</span>
             </div>
             <span className="logo-text">InterViewMe</span>
           </div>
