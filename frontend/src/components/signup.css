@@ -1,176 +1,91 @@
-/* --- 1. Consistent CSS Variables (Copied from Home.css for consistency) --- */
-:root {
-    --color-primary: #5850ec;
-    --color-primary-light: #eef2ff;
-    --color-primary-dark: #3730a3;
-    --color-text-header: #111827;
-    --color-text-body: #4b5563;
-    --color-background-soft: #f9fafb;
-    --color-background-white: #ffffff;
-    --color-success: #10b981;
-    --color-success-bg: #f0fdf4;
-    --color-danger: #ef4444;
-    --color-danger-bg: #fef2f2;
-    --shadow-lift: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
-    --shadow-deep: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+.signup-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #6a5af9, #7f4bff);
+  font-family: "Inter", sans-serif;
+  padding: 20px;
 }
 
-/* --- 2. Page Container --- */
-.signup-page-container {
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: var(--color-background-soft); /* Soft, consistent background */
-    padding: 2rem;
-    font-family: 'Inter', sans-serif;
-}
-
-/* --- 3. Card/Form Wrapper --- */
 .signup-card {
-    width: 100%;
-    max-width: 28rem;
-    padding: 2.5rem;
-    background-color: var(--color-background-white);
-    border-radius: 1.5rem; /* Larger border radius */
-    box-shadow: var(--shadow-deep); /* Defined, professional shadow */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border: 1px solid #e5e7eb; /* Subtle border */
+  width: 380px;
+  padding: 35px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+  text-align: center;
+  animation: fadeIn 0.4s ease-out;
 }
 
-/* --- 4. Header --- */
 .signup-icon {
-    width: 2.5rem;
-    height: 2.5rem;
-    color: var(--color-primary);
-    margin-bottom: 1rem;
+  width: 45px;
+  height: 45px;
+  color: #6a5af9;
+  margin-bottom: 10px;
 }
 
 .signup-title {
-    text-align: center;
-    margin-bottom: 1.5rem;
-    font-size: 2rem;
-    font-weight: 800;
-    color: var(--color-text-header);
+  font-size: 28px;
+  font-weight: 800;
+  color: #202020;
+  margin-bottom: 20px;
 }
 
-/* --- 5. Form Elements --- */
 .signup-form {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
-.input-wrapper {
-    position: relative;
+.input-box {
+  position: relative;
 }
 
-.input-icon {
-    position: absolute;
-    top: 50%;
-    left: 0.75rem;
-    transform: translateY(-50%);
-    width: 1.25rem;
-    height: 1.25rem;
-    color: var(--color-text-body);
-    transition: color 0.15s ease-in-out;
+.input-box input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #d2d2d2;
+  font-size: 15px;
+  outline: none;
+  transition: 0.2s;
 }
 
-.signup-input {
-    width: 100%;
-    padding: 0.75rem 0.75rem 0.75rem 2.5rem; /* Padded for icon */
-    border-radius: 0.75rem;
-    border: 1px solid #d1d5db; /* Light gray border */
-    font-size: 1rem;
-    outline: none;
-    transition: all 0.25s ease;
+.input-box input:focus {
+  border-color: #6a5af9;
+  box-shadow: 0 0 0 3px rgba(106, 90, 249, 0.2);
 }
 
-.signup-input:focus {
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px var(--color-primary-light);
+button {
+  background: #6a5af9;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
-.input-wrapper:focus-within .input-icon {
-    color: var(--color-primary);
+button:hover {
+  background: #5847df;
 }
 
-/* --- 6. Button --- */
-.signup-button {
-    width: 100%;
-    padding: 0.875rem;
-    margin-top: 0.5rem;
-    color: var(--color-background-white);
-    font-weight: 700;
-    border-radius: 0.75rem;
-    transition: all 0.25s ease;
-    box-shadow: 0 4px 6px -1px rgba(88, 80, 236, 0.4); /* Primary color shadow */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    border: none;
-    cursor: pointer;
+button:disabled {
+  background: #b8b8b8;
+  cursor: not-allowed;
 }
 
-.btn-primary-active {
-    background-color: var(--color-primary);
-}
-
-.btn-primary-active:hover {
-    background-color: var(--color-primary-dark);
-    transform: translateY(-1px);
-    box-shadow: 0 8px 10px -2px rgba(88, 80, 236, 0.6);
-}
-
-.btn-disabled {
-    background-color: #9ca3af;
-    cursor: not-allowed;
-    box-shadow: none;
-}
-
-/* --- 7. Messages --- */
 .message {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 1rem;
-    font-size: 0.875rem;
-    padding: 0.75rem;
-    border-radius: 0.5rem;
+  margin-top: 12px;
+  font-size: 14px;
+  color: #d10f34;
+  font-weight: 600;
 }
 
-.error-message {
-    color: var(--color-danger);
-    background-color: var(--color-danger-bg);
-    border: 1px solid #fca5a5;
-}
-
-.success-message {
-    color: var(--color-success);
-    background-color: var(--color-success-bg);
-    border: 1px solid #6ee7b7;
-}
-
-/* --- 8. Footer Link --- */
-.signin-text {
-    margin-top: 1.5rem;
-    font-size: 0.875rem;
-    text-align: center;
-    color: var(--color-text-body);
-}
-
-.signin-link {
-    color: var(--color-primary);
-    font-weight: 700;
-    margin-left: 0.25rem;
-    text-decoration: none;
-    transition: color 0.15s ease-in-out;
-}
-
-.signin-link:hover {
-    color: var(--color-primary-dark);
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
 }

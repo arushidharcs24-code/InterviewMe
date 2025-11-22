@@ -1,42 +1,155 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
+/* App.css */
+
+/* --- Global --- */
+body, html, #root {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #4f46e5, #8b5cf6);
+}
+
+/* --- Card --- */
+.auth-card {
+  width: 100%;
+  max-width: 400px;
+  background: #ffffff;
+  border-radius: 1rem;
   padding: 2rem;
+  border: 1px solid #f3f4f6;
+  box-shadow: 0 20px 25px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.3s ease-in-out;
+}
+.auth-card:hover {
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: 0 25px 40px rgba(0,0,0,0.15);
+}
+
+/* --- Header --- */
+.auth-card h2 {
+  font-weight: 800;
+  font-size: 2rem;
+  color: #1f2937;
+  margin-bottom: 1.5rem;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* --- Input Groups --- */
+.input-group {
+  position: relative;
+  width: 100%;
+  margin-bottom: 1rem;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.input-field {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  font-size: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  outline: none;
+  transition: all 0.25s ease-in-out;
+  background-color: #f9fafb;
+}
+.input-field:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.2);
+  background-color: #ffffff;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+/* --- Icons --- */
+.input-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  width: 1.25rem;
+  height: 1.25rem;
+  transition: all 0.25s ease-in-out;
+}
+.input-group:focus-within .input-icon {
+  color: #4f46e5;
 }
 
-.card {
-  padding: 2em;
+/* --- Buttons --- */
+.btn {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-login {
+  background-color: #4f46e5;
+  color: #ffffff;
+  box-shadow: 0 4px 15px rgba(79,70,229,0.4);
+}
+.btn-login:hover {
+  background-color: #4338ca;
+  transform: translateY(-2px) scale(1.01);
+}
+.btn-disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+.btn-back {
+  background-color: #9333ea;
+  color: #ffffff;
+}
+.btn-back:hover {
+  background-color: #7e22ce;
+  transform: translateY(-1px);
 }
 
-.read-the-docs {
-  color: #888;
+/* --- Messages --- */
+.alert {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  margin-top: 1rem;
+}
+.alert-success {
+  background-color: #d1fae5;
+  border: 1px solid #10b981;
+  color: #047857;
+}
+.alert-error {
+  background-color: #fee2e2;
+  border: 1px solid #f87171;
+  color: #b91c1c;
+}
+
+/* --- Links --- */
+.text-link {
+  color: #4f46e5;
+  font-weight: 600;
+  margin-left: 0.25rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.text-link:hover {
+  color: #4338ca;
+  text-decoration: underline;
+}
+
+/* --- Spinner --- */
+.spinner {
+  animation: spin 1s linear infinite;
+  height: 1.25rem;
+  width: 1.25rem;
+  color: #fff;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
